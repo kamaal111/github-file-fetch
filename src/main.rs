@@ -16,6 +16,9 @@ struct Args {
 
     #[clap(short, long)]
     filepath: String,
+
+    #[clap(short, long, default_value_t = String::from("./"))]
+    output: String,
 }
 
 fn main() {
@@ -26,7 +29,7 @@ fn main() {
     let response = make_request(url);
 
     let filename = filepath.split("/").last().unwrap();
-    let output_file_path = Path::new("./").join(filename);
+    let output_file_path = Path::new(&args.output).join(filename);
     std::fs::write(output_file_path, response).expect("unable to write file");
 }
 
