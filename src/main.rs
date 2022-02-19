@@ -6,7 +6,15 @@ fn main() {
     let branch = "main";
     let filepath = "2021/day1/input.txt";
     let url = make_url(user, repository, branch, filepath);
-    println!("{}", url);
+
+    let response = make_request(url);
+    println!("{}", response)
+}
+
+fn make_request(url: String) -> String {
+    let response = reqwest::blocking::get(url).unwrap();
+    let body = response.text().unwrap();
+    body
 }
 
 fn make_url(user: &str, repository: &str, branch: &str, filepath: &str) -> String {
@@ -22,8 +30,10 @@ fn make_url(user: &str, repository: &str, branch: &str, filepath: &str) -> Strin
 
         url = url
             .join(&string_to_join)
-            .expect("could not join path in url");
+            .expect(&format!("could not join {} in to url", string_to_join));
     }
 
-    url.to_string()
+    let mut url = url.to_string();
+    url.pop();
+    url
 }
