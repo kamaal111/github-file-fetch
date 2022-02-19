@@ -1,3 +1,4 @@
+use std::path::Path;
 use url::Url;
 
 fn main() {
@@ -8,7 +9,10 @@ fn main() {
     let url = make_url(user, repository, branch, filepath);
 
     let response = make_request(url);
-    println!("{}", response)
+
+    let filename = filepath.split("/").last().unwrap();
+    let output_file_path = Path::new("./").join(filename);
+    std::fs::write(output_file_path, response).expect("unable to write file");
 }
 
 fn make_request(url: String) -> String {
@@ -33,7 +37,7 @@ fn make_url(user: &str, repository: &str, branch: &str, filepath: &str) -> Strin
             .expect(&format!("could not join {} in to url", string_to_join));
     }
 
-    let mut url = url.to_string();
-    url.pop();
-    url
+    let mut url_string = url.to_string();
+    url_string.pop();
+    url_string
 }
