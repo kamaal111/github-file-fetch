@@ -2,6 +2,8 @@ use clap::Parser;
 use std::path::Path;
 use url::Url;
 
+const GITHUB_FILE_BASE_URL: &str = "https://raw.githubusercontent.com";
+
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
@@ -40,7 +42,7 @@ fn make_request(url: String) -> String {
 }
 
 fn make_url(user: &str, repository: &str, branch: &str, filepath: &str) -> String {
-    let mut url = Url::parse("https://raw.githubusercontent.com").unwrap();
+    let mut url = Url::parse(GITHUB_FILE_BASE_URL).unwrap();
 
     let strings_to_join = [user, repository, branch, filepath];
     for string_to_join in strings_to_join {
