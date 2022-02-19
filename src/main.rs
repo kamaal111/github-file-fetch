@@ -1,5 +1,6 @@
 use clap::Parser;
 use std::path::Path;
+use std::time::Instant;
 use url::Url;
 
 const GITHUB_FILE_BASE_URL: &str = "https://raw.githubusercontent.com";
@@ -24,6 +25,8 @@ struct Args {
 }
 
 fn main() {
+    let now = Instant::now();
+
     let args = Args::parse();
     let filepath = args.filepath;
     let url = make_url(&args.user, &args.repo, &args.branch, &filepath);
@@ -33,6 +36,9 @@ fn main() {
     let filename = filepath.split("/").last().unwrap();
     let output_file_path = Path::new(&args.output).join(filename);
     std::fs::write(output_file_path, response).expect("unable to write file");
+
+    let elapsed = now.elapsed();
+    println!("done in {:.2?} ✨", elapsed);
 }
 
 fn make_request(url: String) -> String {
