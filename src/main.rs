@@ -1,12 +1,27 @@
+use clap::Parser;
 use std::path::Path;
 use url::Url;
 
+#[derive(Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    #[clap(short, long)]
+    user: String,
+
+    #[clap(short, long)]
+    repo: String,
+
+    #[clap(short, long)]
+    branch: String,
+
+    #[clap(short, long)]
+    filepath: String,
+}
+
 fn main() {
-    let user = "kamaal111";
-    let repository = "AdventOfCode";
-    let branch = "main";
-    let filepath = "2021/day1/input.txt";
-    let url = make_url(user, repository, branch, filepath);
+    let args = Args::parse();
+    let filepath = args.filepath;
+    let url = make_url(&args.user, &args.repo, &args.branch, &filepath);
 
     let response = make_request(url);
 
